@@ -1,5 +1,5 @@
 class CharacterClass:
-    def __init__(self, hp, mp):  # self - ссылка на сам объект этого класса
+    def __init__(self, hp=20, mp=10):  # self - ссылка на сам объект этого класса
         self.hp = hp  # конструктор класса
         self.mp = mp
 
@@ -20,3 +20,9 @@ class CharacterClass:
 
     def set_mp(self, mp):
         self.mp = mp
+
+    def death_check(self):
+        if self.hp < 0 or self.hp == 0:
+            return True
+        else:
+            return False
