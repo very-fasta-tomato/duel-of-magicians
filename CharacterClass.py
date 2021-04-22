@@ -8,3 +8,15 @@ class CharacterClass:
 
     def change_mp(self, delta_mp):  # метод изменения мп
         self.mp = self.mp + delta_mp
+
+    def get_hp(self):
+        return self.hp
+
+    def get_mp(self):
+        return self.mp
+
+    def set_hp(self, hp):
+        self.hp = hp
+
+    def set_mp(self, mp):
+        self.mp = mp
