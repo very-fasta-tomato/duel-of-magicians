@@ -1,4 +1,4 @@
-class CharacterClass:
+class Character:
     def __init__(self, hp=20, mp=10):  # self - ссылка на сам объект этого класса
         self.hp = hp  # конструктор класса
         self.mp = mp
