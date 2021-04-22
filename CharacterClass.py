@@ -21,7 +21,7 @@ class CharacterClass:
     def set_mp(self, mp):
         self.mp = mp
 
-    def death_check(self):
+    def death_check(self):  # проверка смерти
         if self.hp < 0 or self.hp == 0:
             return True
         else:
