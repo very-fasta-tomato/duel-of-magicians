@@ -8,6 +8,8 @@ class Character:
 
     def change_mp(self, delta_mp):  # метод изменения мп
         self.mp = self.mp + delta_mp
+        if self.mp < 0:  # защита от ухода маны в -
+            self.mp = 0
 
     def get_hp(self):
         return self.hp
