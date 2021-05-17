@@ -9,11 +9,11 @@ root = Tk()
 
 def startgame(selected):
     player = CharacterClass.Character()
-    if selected.get() == 1:
+    if selected == 1:
         spell1 = createObject.createclassic()
         spell2 = createObject.createclassic()
         spell3 = createObject.createclassic()
-    if selected.get() == 2:
+    if selected == 2:
         spell1=createObject.createmaximum()
         spell2 = createObject.createmaximum()
         spell3 = createObject.createmaximum()
@@ -26,7 +26,7 @@ def command():
     window2 = Toplevel(root)
 
     def createButton():
-        btn21 = Button(window2, text="Начать игру", command=startgame)
+        btn21 = Button(window2, text="Начать игру", command=startgame(selected))
         btn21.grid(column=0, row=2)
     window2.title("Режимы игры")
     window2.geometry('450x450')
