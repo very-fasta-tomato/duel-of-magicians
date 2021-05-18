@@ -13,42 +13,44 @@ root = Tk()  # главное окно
 
 
 def startgame(selected):
-
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
+
+    # if selected == 1:
+    spell1 = createObject.createclassic()
+    spell2 = createObject.createclassic()
+    spell3 = createObject.createclassic()
+    # if selected == 2:
+    #spell1 = createObject.createmaximum()
+    #spell2 = createObject.createmaximum()
+    #spell3 = createObject.createmaximum()
 
     def cast(number):
         def usespell(spell):
             player.change_hp(spell.delta_ally_hp)
             player.change_mp(spell.delta_ally_mp)
+            lb3411.configure(text=player.get_hp())
+            lb3421.configure(text=player.get_mp())
             r = constructor.output(spell.delta_enemy_hp, spell.delta_enemy_mp, "json")
             player.death_check()
             # добавить окно"вы проиграли"
             s.sendto(r.encode(), ('127.0.0.1', 8888))
-            spell = SpellClass.Spell(0, 0, 0, 0, 0)
-            return spell
 
         if selected == 1:
             if number == 1:
-                spell1 = createObject.createclassic()
-                spell1 = usespell(spell1)
+                usespell(spell1)
             if number == 2:
-                spell2 = createObject.createclassic()
-                spell2 = usespell(spell2)
+                usespell(spell2)
             if number == 3:
-                spell3 = createObject.createclassic()
-                spell3 = usespell(spell3)
+                usespell(spell3)
         if selected == 2:
             if number == 1:
-                spell1 = createObject.createmaximum()
-                spell1 = usespell(spell1)
-            if number == 1:
-                spell2 = createObject.createmaximum()
-                spell2 = usespell(spell2)
-            if number == 1:
-                spell3 = createObject.createmaximum()
-                spell3 = usespell(spell3)
+                usespell(spell1)
+            if number == 2:
+                usespell(spell2)
+            if number == 3:
+                usespell(spell3)
 
     player = CharacterClass.Character()
     windowGame = Toplevel()
@@ -134,6 +136,23 @@ def startgame(selected):
     lbl335.grid(column=4, row=5)
     lb3351 = Label(windowGame, text='')
     lb3351.grid(column=5, row=5)  # техническое поле
+    lb3411.configure(text=player.get_hp())
+    lb3421.configure(text=player.get_mp())
+    lb3111.configure(text=spell1.delta_enemy_hp)
+    lb3121.configure(text=spell1.delta_ally_mp)
+    lb3131.configure(text=spell1.delta_enemy_mp)
+    lb3141.configure(text=spell1.delta_ally_hp)
+    lb3151.configure(text=spell1.verojatnost_popadanija)
+    lb3211.configure(text=spell2.delta_enemy_hp)
+    lb3221.configure(text=spell2.delta_ally_mp)
+    lb3231.configure(text=spell2.delta_enemy_mp)
+    lb3241.configure(text=spell2.delta_ally_hp)
+    lb3251.configure(text=spell2.verojatnost_popadanija)
+    lb3311.configure(text=spell3.delta_enemy_hp)
+    lb3321.configure(text=spell3.delta_ally_mp)
+    lb3331.configure(text=spell3.delta_enemy_mp)
+    lb3341.configure(text=spell3.delta_ally_hp)
+    lb3351.configure(text=spell3.verojatnost_popadanija)
 
 
 def command():
