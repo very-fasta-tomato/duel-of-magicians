@@ -1,204 +1,34 @@
 import CharacterClass
 import SpellClass
 import createObject
-import tkinter as tk
 import constructor
 import socket
-from tkinter import *
-from tkinter import ttk
-from tkinter.ttk import *
-from tkinter.colorchooser import askcolor
+import random
+import PySimpleGUI as sg
 
-root = Tk()  # главное окно
+tab1_layout = [[sg.Button('Начать игру')]]
 
+tab2_layout = [[sg.Text('Победы:', size=(9, 1), key='-vintext-')],
+               [sg.Text('Поражения:', size=(9, 1), key='-losetext-')]]
 
-def startgame(selected):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+tab3_layout = [[]]
 
-    # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
+layout = [[sg.TabGroup(
+    [[sg.Tab('Игра', tab1_layout), sg.Tab('Статистика', tab2_layout), sg.Tab('Настройки', tab3_layout)]],
+    tooltip='TIP')]]
 
-    # if selected == 1:
-    spell1 = createObject.createclassic()
-    spell2 = createObject.createclassic()
-    spell3 = createObject.createclassic()
-    # if selected == 2:
-    #spell1 = createObject.createmaximum()
-    #spell2 = createObject.createmaximum()
-    #spell3 = createObject.createmaximum()
+#layout2=[[sg.Text('Выберете режим игры', size=(19, 1))],
+ #        [sg.Radio('Стандартный', 1, key=['R'])],
+  #       [sg.Radio('Расширенный', 1, key=['R2'])]]
 
-    def cast(number):
-        def usespell(spell):
-            player.change_hp(spell.delta_ally_hp)
-            player.change_mp(spell.delta_ally_mp)
-            lb3411.configure(text=player.get_hp())
-            lb3421.configure(text=player.get_mp())
-            r = constructor.output(spell.delta_enemy_hp, spell.delta_enemy_mp, "json")
-            player.death_check()
-            # добавить окно"вы проиграли"
-            s.sendto(r.encode(), ('127.0.0.1', 8888))
+window = sg.Window('Дуэль магов', layout)
 
-        if selected == 1:
-            if number == 1:
-                usespell(spell1)
-            if number == 2:
-                usespell(spell2)
-            if number == 3:
-                usespell(spell3)
-        if selected == 2:
-            if number == 1:
-                usespell(spell1)
-            if number == 2:
-                usespell(spell2)
-            if number == 3:
-                usespell(spell3)
-
-    player = CharacterClass.Character()
-    windowGame = Toplevel()
-    windowGame.title("Битва магов")
-    windowGame.geometry('700x700')
-    lbl341 = Label(windowGame, text='Ваше XP:')
-    lbl341.grid(column=6, row=0)
-    lb3411 = Label(windowGame, text='')
-    lb3411.grid(column=7, row=0)  # техническое поле
-    lbl342 = Label(windowGame, text='Ваша мана:')
-    lbl342.grid(column=8, row=0)
-    lb3421 = Label(windowGame, text='')
-    lb3421.grid(column=9, row=0)  # техническое поле
-    btn31 = Button(windowGame, text="Заклинание 1", command=cast(1))
-    btn31.grid(column=0, row=0)
-    lb3101 = Label(windowGame, text='')
-    lb3101.grid(column=1, row=0)  # техническое поле
-    lbl311 = Label(windowGame, text='Урон:')
-    lbl311.grid(column=0, row=1)
-    lb3111 = Label(windowGame, text='')
-    lb3111.grid(column=1, row=1)  # техническое поле
-    lbl312 = Label(windowGame, text='Мана:')
-    lbl312.grid(column=0, row=2)
-    lb3121 = Label(windowGame, text='')
-    lb3121.grid(column=1, row=2)  # техническое поле
-    lbl313 = Label(windowGame, text='урон мане:')
-    lbl313.grid(column=0, row=3)
-    lb3131 = Label(windowGame, text='')
-    lb3131.grid(column=1, row=3)  # техническое поле
-    lbl314 = Label(windowGame, text='восстановление хп:')
-    lbl314.grid(column=0, row=4)
-    lb3141 = Label(windowGame, text='')
-    lb3141.grid(column=1, row=4)  # техническое поле
-    lbl315 = Label(windowGame, text='вероятность попадания:')
-    lbl315.grid(column=0, row=5)
-    lb3151 = Label(windowGame, text='')
-    lb3151.grid(column=1, row=5)  # техническое поле
-    btn32 = Button(windowGame, text="Заклинание 2", command=cast(2))
-    btn32.grid(column=2, row=0)
-    lb3201 = Label(windowGame, text='')
-    lb3201.grid(column=3, row=0)  # техническое поле
-    lbl321 = Label(windowGame, text='Урон:')
-    lbl321.grid(column=2, row=1)
-    lb3211 = Label(windowGame, text='')
-    lb3211.grid(column=3, row=1)  # техническое поле
-    lbl322 = Label(windowGame, text='Мана:')
-    lbl322.grid(column=2, row=2)
-    lb3221 = Label(windowGame, text='')
-    lb3221.grid(column=3, row=2)  # техническое поле
-    lbl323 = Label(windowGame, text='урон мане:')
-    lbl323.grid(column=2, row=3)
-    lb3231 = Label(windowGame, text='')
-    lb3231.grid(column=3, row=3)  # техническое поле
-    lbl324 = Label(windowGame, text='восстановление хп:')
-    lbl324.grid(column=2, row=4)
-    lb3241 = Label(windowGame, text='')
-    lb3241.grid(column=3, row=4)  # техническое поле
-    lbl325 = Label(windowGame, text='вероятность попадания:')
-    lbl325.grid(column=2, row=5)
-    lb3251 = Label(windowGame, text='')
-    lb3251.grid(column=3, row=5)  # техническое поле
-    btn33 = Button(windowGame, text="Заклинание 3", command=cast(3))
-    btn33.grid(column=4, row=0)
-    lb3301 = Label(windowGame, text='')
-    lb3301.grid(column=5, row=0)  # техническое поле
-    lbl331 = Label(windowGame, text='Урон:')
-    lbl331.grid(column=4, row=1)
-    lb3311 = Label(windowGame, text='')
-    lb3311.grid(column=5, row=1)  # техническое поле
-    lbl332 = Label(windowGame, text='Мана:')
-    lbl332.grid(column=4, row=2)
-    lb3321 = Label(windowGame, text='')
-    lb3321.grid(column=5, row=2)  # техническое поле
-    lbl333 = Label(windowGame, text='урон мане:')
-    lbl333.grid(column=4, row=3)
-    lb3331 = Label(windowGame, text='')
-    lb3331.grid(column=5, row=3)  # техническое поле
-    lbl334 = Label(windowGame, text='восстановление хп:')
-    lbl334.grid(column=4, row=4)
-    lb3341 = Label(windowGame, text='')
-    lb3341.grid(column=5, row=4)  # техническое поле
-    lbl335 = Label(windowGame, text='вероятность попадания:')
-    lbl335.grid(column=4, row=5)
-    lb3351 = Label(windowGame, text='')
-    lb3351.grid(column=5, row=5)  # техническое поле
-    lb3411.configure(text=player.get_hp())
-    lb3421.configure(text=player.get_mp())
-    lb3111.configure(text=spell1.delta_enemy_hp)
-    lb3121.configure(text=spell1.delta_ally_mp)
-    lb3131.configure(text=spell1.delta_enemy_mp)
-    lb3141.configure(text=spell1.delta_ally_hp)
-    lb3151.configure(text=spell1.verojatnost_popadanija)
-    lb3211.configure(text=spell2.delta_enemy_hp)
-    lb3221.configure(text=spell2.delta_ally_mp)
-    lb3231.configure(text=spell2.delta_enemy_mp)
-    lb3241.configure(text=spell2.delta_ally_hp)
-    lb3251.configure(text=spell2.verojatnost_popadanija)
-    lb3311.configure(text=spell3.delta_enemy_hp)
-    lb3321.configure(text=spell3.delta_ally_mp)
-    lb3331.configure(text=spell3.delta_enemy_mp)
-    lb3341.configure(text=spell3.delta_ally_hp)
-    lb3351.configure(text=spell3.verojatnost_popadanija)
-
-
-def command():
-    window1 = tk.Toplevel(root)
-
-    def createButton():
-        btn21 = Button(window1, text="Начать игру", command=startgame(selected))  # запуск основного кода
-        btn21.grid(column=1, row=3)
-
-    window1.title("Режимы игры")
-    window1.geometry('450x450')
-    lbl = Label(window1, text="Выберите режим игры")
-    lbl.grid(column=0, row=1)
-    selected = IntVar()
-    rad1 = Radiobutton(window1, text='Традиционный', value=1, variable=selected, command=createButton)
-    rad2 = Radiobutton(window1, text='Нетрадиционный', value=2, variable=selected, command=createButton)
-
-    rad1.grid(column=0, row=2)
-    rad2.grid(column=1, row=2)
-
-    btn22 = Button(window1, text="Назад", command=window1.quit)
-
-    btn22.grid(column=0, row=3)
-    window1.mainloop()
-
-
-root.title("Битва магов")
-root.geometry('600x600')
-tab_control = ttk.Notebook(root)
-tab1 = ttk.Frame(tab_control)
-tab2 = ttk.Frame(tab_control)
-tab3 = ttk.Frame(tab_control)
-tab_control.add(tab1, text='Игра')
-tab_control.add(tab2, text='Статистика')
-lbl1 = Label(tab2, text="Победы")
-lbl1.grid(column=0, row=1)
-lbl2 = Label(tab2, text="Поражения")
-lbl2.grid(column=2, row=1)
-tab_control.add(tab3, text='Настройки')
-chk_state = BooleanVar()
-chk_state.set(True)
-chk1 = Checkbutton(tab3, text='Включить звук', var=chk_state)
-chk1.grid(column=0, row=0)
-btn11 = Button(tab1, text="Начать игру", command=command)  # открывается окно с выбором режимов
-btn11.grid(column=1, row=0)
-btn12 = Button(tab1, text="Выход", command=root.quit)
-btn12.grid(column=1, row=2)
-tab_control.pack(expand=1, fill='both')
-root.mainloop()
+while True:
+    event, values = window.read()
+    #if event == "Начать игру":
+       # window2=sg.Window('Режимы игры', layout2)
+        #event, values=window2.read()
+        #print(event, values)
+        #window2.close()
+    if event == sg.WIN_CLOSED:
+        break
