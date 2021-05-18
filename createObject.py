@@ -18,5 +18,3 @@ def createmaximum():  # создание заклинания в расшире�
     spell1 = SpellClass.Spell(delta_enemy_hp, delta_enemy_mp, delta_ally_hp, delta_ally_mp, verojatnost_popadanija)
     return spell1
 
-
-createclassic()

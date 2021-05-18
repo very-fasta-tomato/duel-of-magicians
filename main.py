@@ -1,7 +1,9 @@
 import CharacterClass
+import SpellClass
 import createObject
 import tkinter as tk
 import constructor
+import socket
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
@@ -11,15 +13,44 @@ root = Tk()  # главное окно
 
 
 def startgame(selected):
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
+
+    def cast(number):
+        def usespell(spell):
+            player.change_hp(spell.delta_ally_hp)
+            player.change_mp(spell.delta_ally_mp)
+            r = constructor.output(spell.delta_enemy_hp, spell.delta_enemy_mp, "json")
+            player.death_check()
+            # добавить окно"вы проиграли"
+            s.sendto(r.encode(), ('127.0.0.1', 8888))
+            spell = SpellClass.Spell(0, 0, 0, 0, 0)
+            return spell
+
+        if selected == 1:
+            if number == 1:
+                spell1 = createObject.createclassic()
+                spell1 = usespell(spell1)
+            if number == 2:
+                spell2 = createObject.createclassic()
+                spell2 = usespell(spell2)
+            if number == 3:
+                spell3 = createObject.createclassic()
+                spell3 = usespell(spell3)
+        if selected == 2:
+            if number == 1:
+                spell1 = createObject.createmaximum()
+                spell1 = usespell(spell1)
+            if number == 1:
+                spell2 = createObject.createmaximum()
+                spell2 = usespell(spell2)
+            if number == 1:
+                spell3 = createObject.createmaximum()
+                spell3 = usespell(spell3)
+
     player = CharacterClass.Character()
-    if selected == 1:
-        spell1 = createObject.createclassic()
-        spell2 = createObject.createclassic()
-        spell3 = createObject.createclassic()
-    if selected == 2:
-        spell1 = createObject.createmaximum()
-        spell2 = createObject.createmaximum()
-        spell3 = createObject.createmaximum()
     windowGame = Toplevel()
     windowGame.title("Битва магов")
     windowGame.geometry('700x700')
@@ -31,7 +62,7 @@ def startgame(selected):
     lbl342.grid(column=8, row=0)
     lb3421 = Label(windowGame, text='')
     lb3421.grid(column=9, row=0)  # техническое поле
-    btn31 = Button(windowGame, text="Заклинание 1")
+    btn31 = Button(windowGame, text="Заклинание 1", command=cast(1))
     btn31.grid(column=0, row=0)
     lb3101 = Label(windowGame, text='')
     lb3101.grid(column=1, row=0)  # техническое поле
@@ -55,7 +86,7 @@ def startgame(selected):
     lbl315.grid(column=0, row=5)
     lb3151 = Label(windowGame, text='')
     lb3151.grid(column=1, row=5)  # техническое поле
-    btn32 = Button(windowGame, text="Заклинание 2")
+    btn32 = Button(windowGame, text="Заклинание 2", command=cast(2))
     btn32.grid(column=2, row=0)
     lb3201 = Label(windowGame, text='')
     lb3201.grid(column=3, row=0)  # техническое поле
@@ -79,7 +110,7 @@ def startgame(selected):
     lbl325.grid(column=2, row=5)
     lb3251 = Label(windowGame, text='')
     lb3251.grid(column=3, row=5)  # техническое поле
-    btn33 = Button(windowGame, text="Заклинание 3")
+    btn33 = Button(windowGame, text="Заклинание 3", command=cast(3))
     btn33.grid(column=4, row=0)
     lb3301 = Label(windowGame, text='')
     lb3301.grid(column=5, row=0)  # техническое поле
@@ -103,12 +134,6 @@ def startgame(selected):
     lbl335.grid(column=4, row=5)
     lb3351 = Label(windowGame, text='')
     lb3351.grid(column=5, row=5)  # техническое поле
-
-
-    def cast(spell, ):
-        player.change_hp(spell.delta_ally_hp)
-        player.change_mp(spell.delta_ally_mp)
-        constructor.output(spell.delta_enemy_hp, spell.delta_enemy_mp, "json")
 
 
 def command():
