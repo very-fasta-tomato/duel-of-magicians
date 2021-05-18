@@ -1,6 +1,7 @@
 import CharacterClass
 import createObject
 import tkinter as tk
+import constructor
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
@@ -10,6 +11,15 @@ root = Tk()  # главное окно
 
 
 def startgame(selected):
+    player = CharacterClass.Character()
+    if selected == 1:
+        spell1 = createObject.createclassic()
+        spell2 = createObject.createclassic()
+        spell3 = createObject.createclassic()
+    if selected == 2:
+        spell1 = createObject.createmaximum()
+        spell2 = createObject.createmaximum()
+        spell3 = createObject.createmaximum()
     windowGame = Toplevel()
     windowGame.title("Битва магов")
     windowGame.geometry('700x700')
@@ -94,15 +104,11 @@ def startgame(selected):
     lb3351 = Label(windowGame, text='')
     lb3351.grid(column=5, row=5)  # техническое поле
 
-    player = CharacterClass.Character()
-    if selected == 1:
-        spell1 = createObject.createclassic()
-        spell2 = createObject.createclassic()
-        spell3 = createObject.createclassic()
-    if selected == 2:
-        spell1 = createObject.createmaximum()
-        spell2 = createObject.createmaximum()
-        spell3 = createObject.createmaximum()
+
+    def cast(spell, ):
+        player.change_hp(spell.delta_ally_hp)
+        player.change_mp(spell.delta_ally_mp)
+        constructor.output(spell.delta_enemy_hp, spell.delta_enemy_mp, "json")
 
 
 def command():
