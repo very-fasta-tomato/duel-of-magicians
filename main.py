@@ -1,13 +1,29 @@
 import CharacterClass
 import createObject
+import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter.colorchooser import askcolor
 
-root = Tk()
+root = Tk() # главное окно
 
 
 def startgame(selected):
+    windowgame = Tk()
+    windowgame.title("Битва магов")
+    windowgame.geometry('700x700')
+    lbl31 = Label(windowgame, text = 'Мана')
+    lbl31.grid(column=0, row=1)
+    lbl31 = Label(windowgame, text='XP')
+    lbl31.grid(column=1, row=1)
+    btn31 = Button(windowgame, text = "Заклинание 1")
+    btn31.grid(column=0, row=0)
+    btn32 = Button(windowgame, text = "Заклинание 2")
+    btn32.grid(column=1, row=0)
+    btn33 = Button(windowgame, text = "Заклинание 3")
+    btn33.grid(column=2, row=0)
+
     player = CharacterClass.Character()
     if selected == 1:
         spell1 = createObject.createclassic()
@@ -23,26 +39,26 @@ def startgame(selected):
 
 
 def command():
-    window2 = Toplevel(root)
+    window1 = tk.Toplevel(root)
 
     def createButton():
-        btn21 = Button(window2, text="Начать игру", command=startgame(selected))
-        btn21.grid(column=0, row=2)
-    window2.title("Режимы игры")
-    window2.geometry('450x450')
-    lbl = Label(window2, text="Выберите режим игры")
+        btn21 = Button(window1, text="Начать игру", command=startgame(selected)) # запуск основного кода
+        btn21.grid(column=1, row=3)
+    window1.title("Режимы игры")
+    window1.geometry('450x450')
+    lbl = Label(window1, text="Выберите режим игры")
     lbl.grid(column=0, row=1)
     selected = IntVar()
-    rad1 = Radiobutton(window2, text='Традиционный', value=1, variable=selected, command=createButton)
-    rad2 = Radiobutton(window2, text='Нетрадиционный', value=2, variable=selected, command=createButton)
+    rad1 = Radiobutton(window1, text='Традиционный', value=1, variable=selected, command=createButton)
+    rad2 = Radiobutton(window1, text='Нетрадиционный', value=2, variable=selected, command=createButton)
 
-    rad1.grid(column=0, row=3)
-    rad2.grid(column=1, row=3)
+    rad1.grid(column=0, row=2)
+    rad2.grid(column=1, row=2)
 
-    btn22 = Button(window2, text="Назад", command=window2.quit)
+    btn22 = Button(window1, text="Назад", command=window1.quit)
 
-    btn22.grid(column=1, row=2)
-    window2.mainloop()
+    btn22.grid(column=0, row=3)
+    window1.mainloop()
 
 
 
@@ -63,10 +79,9 @@ chk_state = BooleanVar()
 chk_state.set(True)
 chk1 = Checkbutton(tab3, text='Включить звук', var=chk_state)
 chk1.grid(column=0, row=0)
-btn11 = Button(tab1, text="Начать игру", command=command)
+btn11 = Button(tab1, text="Начать игру", command=command) # открывается окно с выбором режимов
 btn11.grid(column=1, row=0)
 btn12 = Button(tab1, text="Выход", command=root.quit)
 btn12.grid(column=1, row=2)
 tab_control.pack(expand=1, fill='both')
-
 root.mainloop()
