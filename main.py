@@ -28,10 +28,10 @@ layout2 = [[sg.Text('Сейчас ваш ход', key='TURN')],  # структ�
             sg.Text('Вероятность попадания', key='-vp2-', size=(21, 1)),
             sg.Text('Вероятность попадания', key='-vp3-', size=(21, 1))]]
 
-window = sg.Window('Дуэль магов', layout)
+window = sg.Window('Дуэль магов', layout)  # объявление главного окна
 
 while True:
-    event, values = window.read()
+    event, values = window.read()  # создание главного окна
     if event == sg.WIN_CLOSED or event == 'Выход':
         break
     if event == 'Статистика':
@@ -65,10 +65,11 @@ while True:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
         s.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
-        window2 = sg.Window('game', layout2)
+        window2 = sg.Window('game', layout2)  # объявление окна с полем
         wn2 = True
         while wn2:
-            event, values = window2.read()
+            event, values = window2.read()  # создание окна с полем
             if event == sg.WIN_CLOSED:
                 wn2 = False
+        window2.close()
 window.close()
