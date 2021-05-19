@@ -6,29 +6,31 @@ import socket
 import random
 import PySimpleGUI as sg
 
-tab1_layout = [[sg.Button('Начать игру')]]
-
-tab2_layout = [[sg.Text('Победы:', size=(9, 1), key='-vintext-')],
-               [sg.Text('Поражения:', size=(9, 1), key='-losetext-')]]
-
-tab3_layout = [[]]
-
-layout = [[sg.TabGroup(
-    [[sg.Tab('Игра', tab1_layout), sg.Tab('Статистика', tab2_layout), sg.Tab('Настройки', tab3_layout)]],
-    tooltip='TIP')]]
-
-#layout2=[[sg.Text('Выберете режим игры', size=(19, 1))],
- #        [sg.Radio('Стандартный', 1, key=['R'])],
-  #       [sg.Radio('Расширенный', 1, key=['R2'])]]
+layout = [[sg.Button('Начать игру', size=(11, 1))],
+          [sg.Button('Статистика', size=(11, 1))],
+          [sg.Button('Настройки', size=(11, 1))],
+          [sg.Button('Выход', size=(11, 1))]]
 
 window = sg.Window('Дуэль магов', layout)
 
 while True:
     event, values = window.read()
-    #if event == "Начать игру":
-       # window2=sg.Window('Режимы игры', layout2)
-        #event, values=window2.read()
-        #print(event, values)
-        #window2.close()
-    if event == sg.WIN_CLOSED:
+    if event == sg.WIN_CLOSED or event == 'Выход':
         break
+    if event == 'Статистика':
+        event, values = sg.Window('Статистика',
+                                  [[sg.Text("Победы", size=(9, 1), key='-winnum-')],
+                                   [sg.Text("Поражения", size=(9, 1), key='-losenum')],
+                                   [sg.Button('Назад')]]).read(close=True)
+        print(event, values)
+    if event == 'Настройки':
+        event, values = sg.Window('Настройки',
+                                  [[sg.Checkbox('Включить звук', enable_events=True, key='-sound-')],
+                                   [sg.Button('Назад')]]).read(close=True)
+        print(event, values)
+    if event == 'Начать игру':
+        event, values = sg.Window('Режимы игры',
+                                  [[sg.Text('Выберете режим игры')],
+                                   [sg.Button('Стандартный', size=(11, 1))],
+                                   [sg.Button('Расширенный', size=(11, 1))]]).read(close=True)
+        print(event, values)
