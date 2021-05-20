@@ -1,3 +1,4 @@
+import json
 import CharacterClass
 import createObject
 import constructor
@@ -34,6 +35,7 @@ s.close()
 s_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получения данных
 s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
 s_out = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для отправки данных
+pvevent = ''
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
@@ -81,14 +83,19 @@ while True:
                                   [[sg.Text('Выберете режим игры')],
                                    [sg.Button('Стандартный', size=(11, 1))],
                                    [sg.Button('Расширенный', size=(11, 1))]]).read(close=True)
+        spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
+        spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
+        spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
         if event == 'Стандартный':
             spell1 = createObject.createclassic()
             spell2 = createObject.createclassic()
             spell3 = createObject.createclassic()
+            pvevent = 'Стандартный'
         if event == 'Расширенный':
             spell1 = createObject.createmaximum()
             spell2 = createObject.createmaximum()
             spell3 = createObject.createmaximum()
+            pvevent = 'Расширенный'
         print(event, values)
         event, values = sg.Window('Поиск оппонента',
                                   [[sg.Text('Введите IP оппонента')],
