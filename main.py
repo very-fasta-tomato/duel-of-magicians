@@ -26,13 +26,14 @@ def screenupdate():
     window2['-vp3-'].Update(str(spell3.verojatnost_popadanija))
 
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получение IP пользователя
 # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
 s.connect(("gmail.com", 80))
 myIP = str(s.getsockname()[0])
 s.close()
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
+s_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получения данных
+s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
+s_out = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для отправки данных
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
@@ -95,7 +96,6 @@ while True:
                                    [sg.Button('OK')]]).read(close=True)
         print(event, values)
         IP = values['-IP-']
-        myIP = values['-myIP-']
         print(IP, myIP)
         player = CharacterClass.Character()
         print(player.get_hp())
@@ -110,7 +110,7 @@ while True:
                 player.change_hp(spell1.delta_ally_hp)
                 player.change_mp(spell1.delta_ally_mp)
                 r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
-                s.sendto(r.encode(), (IP, 22003))
+                s_out.sendto(r.encode(), (IP, 22003))
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
@@ -119,17 +119,19 @@ while True:
                 player.change_hp(spell2.delta_ally_hp)
                 player.change_mp(spell2.delta_ally_mp)
                 r = constructor.output(spell2.delta_enemy_hp, spell2.delta_enemy_mp, "json")
-                s.sendto(r.encode(), (IP, 22003))
+                s_out.sendto(r.encode(), (IP, 22003))
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+                screenupdate()
             if event == 'Заклинание 3':
                 player.change_hp(spell3.delta_ally_hp)
                 player.change_mp(spell3.delta_ally_mp)
                 r = constructor.output(spell3.delta_enemy_hp, spell3.delta_enemy_mp, "json")
-                s.sendto(r.encode(), (IP, 22003))
+                s_out.sendto(r.encode(), (IP, 22003))
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+                screenupdate()
         window2.close()
 window.close()
