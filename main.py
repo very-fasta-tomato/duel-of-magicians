@@ -29,7 +29,9 @@ def screenupdate():
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
 s.connect(("gmail.com", 80))
-myIP = s.getsockname()[0]
+myIP = str(s.getsockname()[0])
+s.close()
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
