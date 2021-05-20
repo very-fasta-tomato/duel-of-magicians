@@ -2,6 +2,7 @@ import socket
 import constructor
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
 outputformat = "json"
 if outputformat == "json":
     r=constructor.output(14, 20, "json")

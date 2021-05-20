@@ -2,6 +2,7 @@ import CharacterClass
 import createObject
 import constructor
 import socket
+import SpellClass
 import PySimpleGUI as sg  # сторонний GUI фреймворк
 
 
@@ -17,13 +18,19 @@ def screenupdate():
     window2['-dem1-'].Update(str(spell1.delta_enemy_mp))
     window2['-dem2-'].Update(str(spell2.delta_enemy_mp))
     window2['-dem3-'].Update(str(spell3.delta_enemy_mp))
-    window2['-dah1-'].Update(str(spell1.delta_ally_hp))
-    window2['-dah2-'].Update(str(spell2.delta_ally_hp))
-    window2['-dah3-'].Update(str(spell3.delta_ally_hp))
+    window2['-dah1-'].Update(str(spell1.delta_ally_hp * (-1)))
+    window2['-dah2-'].Update(str(spell2.delta_ally_hp * (-1)))
+    window2['-dah3-'].Update(str(spell3.delta_ally_hp * (-1)))
     window2['-vp1-'].Update(str(spell1.verojatnost_popadanija))
     window2['-vp2-'].Update(str(spell2.verojatnost_popadanija))
     window2['-vp3-'].Update(str(spell3.verojatnost_popadanija))
 
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
+s.connect(("gmail.com", 80))
+myIP = s.getsockname()[0]
+s.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
@@ -83,8 +90,6 @@ while True:
         event, values = sg.Window('Поиск оппонента',
                                   [[sg.Text('Введите IP оппонента')],
                                    [sg.Input(key='-IP-')],
-                                   [sg.Text('Введите ваш IP')],
-                                   [sg.Input(key='-myIP-')],
                                    [sg.Button('OK')]]).read(close=True)
         print(event, values)
         IP = values['-IP-']
@@ -92,9 +97,6 @@ while True:
         print(IP, myIP)
         player = CharacterClass.Character()
         print(player.get_hp())
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
-        s.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
         window2 = sg.Window('game', layout2)  # объявление окна с полем
         wn2 = True
         while wn2:
@@ -102,5 +104,30 @@ while True:
             screenupdate()
             if event == sg.WIN_CLOSED:
                 wn2 = False
+            if event == 'Заклинание 1':
+                player.change_hp(spell1.delta_ally_hp)
+                player.change_mp(spell1.delta_ally_mp)
+                r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
+                s.sendto(r.encode(), (IP, 22003))
+                spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+                screenupdate()
+            if event == 'Заклинание 2':
+                player.change_hp(spell2.delta_ally_hp)
+                player.change_mp(spell2.delta_ally_mp)
+                r = constructor.output(spell2.delta_enemy_hp, spell2.delta_enemy_mp, "json")
+                s.sendto(r.encode(), (IP, 22003))
+                spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+            if event == 'Заклинание 3':
+                player.change_hp(spell3.delta_ally_hp)
+                player.change_mp(spell3.delta_ally_mp)
+                r = constructor.output(spell3.delta_enemy_hp, spell3.delta_enemy_mp, "json")
+                s.sendto(r.encode(), (IP, 22003))
+                spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
+                spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
         window2.close()
 window.close()
