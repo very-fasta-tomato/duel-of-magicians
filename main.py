@@ -4,7 +4,7 @@ import createObject
 import constructor
 import socket
 import SpellClass
-import PySimpleGUI as sg
+import PySimpleGUI as sg  # сторонний GUI фреймворк
 
 
 def screenupdate():
@@ -72,8 +72,8 @@ while True:
         break
     if event == 'Статистика':
         event, values = sg.Window('Статистика',
-                                  [[sg.Text("Победы", key='-winnum-')],
-                                   [sg.Text("Поражения", key='-losenum-')],
+                                  [[sg.Text("Победы", size=(9, 1)), sg.Text(str(winstat))],
+                                   [sg.Text("Поражения", size=(9, 1)), sg.Text(str(losestat))],
                                    [sg.Button('Назад')]]).read(close=True)
         print(event, values)
     if event == 'Настройки':
@@ -148,9 +148,10 @@ while True:
                 screenupdate()
             result = s_in.recv(1024)
             if enemyturn == True:
+                g = json.loads(result.decode())
                 window2['TURN'].Update('Сейчас ход оппонента')
-                player.change_hp(spell3.delta_ally_hp)
-                player.change_mp(spell3.delta_ally_mp)
+                player.change_hp(g.get('delta_enemy_hp'))
+                player.change_mp(g.get('delta_enemy_mp'))
                 enemyturn = False
                 screenupdate()
         window2.close()
