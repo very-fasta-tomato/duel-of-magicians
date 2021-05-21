@@ -36,6 +36,8 @@ s_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для п�
 s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
 s_out = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для отправки данных
 pvevent = ''
+winstat=0
+losestat=0
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
@@ -69,8 +71,8 @@ while True:
         break
     if event == 'Статистика':
         event, values = sg.Window('Статистика',
-                                  [[sg.Text("Победы", key='-winnum-')],
-                                   [sg.Text("Поражения", key='-losenum-')],
+                                  [[sg.Text("Победы",size=(9,1)), sg.Text(str(winstat))],
+                                   [sg.Text("Поражения", size=(9,1)), sg.Text(str(losestat))],
                                    [sg.Button('Назад')]]).read(close=True)
         print(event, values)
     if event == 'Настройки':
