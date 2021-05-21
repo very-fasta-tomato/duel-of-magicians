@@ -36,9 +36,6 @@ s_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для п�
 s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
 s_out = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для отправки данных
 pvevent = ''
-winstat = 0
-losestat = 0
-enemyturn = ''
 
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
@@ -124,7 +121,6 @@ while True:
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
                 screenupdate()
             if event == 'Заклинание 2':
                 player.change_hp(spell2.delta_ally_hp)
@@ -134,7 +130,6 @@ while True:
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
                 screenupdate()
             if event == 'Заклинание 3':
                 player.change_hp(spell3.delta_ally_hp)
@@ -144,14 +139,6 @@ while True:
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
-                screenupdate()
-            result = s_in.recv(1024)
-            if enemyturn == True:
-                window2['Turn'].Update('Сейчас ход оппонента')
-                player.change_hp(spell3.delta_ally_hp)
-                player.change_mp(spell3.delta_ally_mp)
-                enemyturn = False
                 screenupdate()
         window2.close()
 window.close()
