@@ -1,6 +1,6 @@
 import json
-import xml.etree.ElementTree as xml
-
+import os
+import xml.etree.ElementTree as ET
 
 def output(delta_enemy_hp, delta_enemy_mp, outputformat):
     if outputformat == "json":  # создание выходного файла на json
