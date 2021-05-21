@@ -4,7 +4,7 @@ import createObject
 import constructor
 import socket
 import SpellClass
-import PySimpleGUI as sg  # сторонний GUI фреймворк
+import PySimpleGUI as sg
 
 
 def screenupdate():
