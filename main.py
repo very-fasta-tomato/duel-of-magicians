@@ -128,6 +128,14 @@ while True:
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 enemyturn = True
                 screenupdate()
+                if enemyturn == True:
+                    result = s_in.recv(1024)
+                    g = json.loads(result.decode())
+                    window2['TURN'].Update('Сейчас ход оппонента')
+                    player.change_hp(g.get('delta_enemy_hp'))
+                    player.change_mp(g.get('delta_enemy_mp'))
+                    enemyturn = False
+                    screenupdate()
             if event == 'Заклинание 2':
                 player.change_hp(spell2.delta_ally_hp)
                 player.change_mp(spell2.delta_ally_mp)
@@ -138,6 +146,14 @@ while True:
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 enemyturn = True
                 screenupdate()
+                if enemyturn == True:
+                    result = s_in.recv(1024)
+                    g = json.loads(result.decode())
+                    window2['TURN'].Update('Сейчас ход оппонента')
+                    player.change_hp(g.get('delta_enemy_hp'))
+                    player.change_mp(g.get('delta_enemy_mp'))
+                    enemyturn = False
+                    screenupdate()
             if event == 'Заклинание 3':
                 player.change_hp(spell3.delta_ally_hp)
                 player.change_mp(spell3.delta_ally_mp)
@@ -148,13 +164,13 @@ while True:
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 enemyturn = True
                 screenupdate()
-            result = s_in.recv(1024)
-            if enemyturn == True:
-                g = json.loads(result.decode())
-                window2['TURN'].Update('Сейчас ход оппонента')
-                player.change_hp(g.get('delta_enemy_hp'))
-                player.change_mp(g.get('delta_enemy_mp'))
-                enemyturn = False
-                screenupdate()
+                if enemyturn == True:
+                    result = s_in.recv(1024)
+                    g = json.loads(result.decode())
+                    window2['TURN'].Update('Сейчас ход оппонента')
+                    player.change_hp(g.get('delta_enemy_hp'))
+                    player.change_mp(g.get('delta_enemy_mp'))
+                    enemyturn = False
+                    screenupdate()
         window2.close()
 window.close()
