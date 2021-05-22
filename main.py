@@ -107,6 +107,8 @@ while True:
         print(event, values)
         IP = values['-IP-']
         print(IP, myIP)
+        if myIP > IP:
+            enemyturn = False
         player = CharacterClass.Character()
         print(player.get_hp())
         window2 = sg.Window('game', layout2)  # объявление окна с полем
