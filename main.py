@@ -34,6 +34,7 @@ myIP = str(s.getsockname()[0])
 s.close()
 s_in = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # сокет для получения данных
 s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
+s_in.listen(1)
 s_out = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # сокет для отправки данных
 pvevent = ''
 winstat = 0
@@ -129,12 +130,10 @@ while True:
                     spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 data = b""
-                s_out.settimeout(60)
-                tmp = s_out.recv(1024)
-                while tmp:
-                    data += tmp
-                    tmp = s_out.recv(1024)
-                g = json.loads(data.decode())
+                s_in.settimeout(60)
+                client, addr = s_in.accept()
+                result = client.recv(1024)
+                g = json.loads(result.decode())
                 window2['TURN'].Update('Сейчас ход оппонента')
                 player.change_hp(g.get('delta_enemy_hp'))
                 player.change_mp(g.get('delta_enemy_mp'))
@@ -148,12 +147,10 @@ while True:
                     spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 data = b""
-                s_out.settimeout(60)
-                tmp = s_out.recv(1024)
-                while tmp:
-                    data += tmp
-                    tmp = s_out.recv(1024)
-                g = json.loads(data.decode())
+                s_in.settimeout(60)
+                client, addr = s_in.accept()
+                result = client.recv(1024)
+                g = json.loads(result.decode())
                 window2['TURN'].Update('Сейчас ход оппонента')
                 player.change_hp(g.get('delta_enemy_hp'))
                 player.change_mp(g.get('delta_enemy_mp'))
@@ -167,14 +164,14 @@ while True:
                     spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 data = b""
-                s_out.settimeout(60)
-                tmp = s_out.recv(1024)
-                while tmp:
-                    data += tmp
-                    tmp = s_out.recv(1024)
-                g = json.loads(data.decode())
+                s_in.settimeout(60)
+                client, addr = s_in.accept()
+                result = client.recv(1024)
+                g = json.loads(result.decode())
                 window2['TURN'].Update('Сейчас ход оппонента')
                 player.change_hp(g.get('delta_enemy_hp'))
                 player.change_mp(g.get('delta_enemy_mp'))
         window2.close()
+        s_out.close()
+        s_in.close()
 window.close()
