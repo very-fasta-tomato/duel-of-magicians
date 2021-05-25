@@ -129,6 +129,7 @@ while True:
                     spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 data = b""
+                s_out.settimeout(60)
                 tmp = s_out.recv(1024)
                 while tmp:
                     data += tmp
