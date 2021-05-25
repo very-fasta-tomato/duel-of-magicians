@@ -28,13 +28,13 @@ def screenupdate():
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получение IP пользователя
-# AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
+# AF_INET - используется IP-протокол четвертой версии. SOCK_STREAM - TCP
 s.connect(("gmail.com", 80))
 myIP = str(s.getsockname()[0])
 s.close()
-s_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получения данных
+s_in = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # сокет для получения данных
 s_in.bind((myIP, 22003))  # резерв адреса myIP и порта 22003
-s_out = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для отправки данных
+s_out = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # сокет для отправки данных
 pvevent = ''
 winstat = 0
 losestat = 0
@@ -122,55 +122,46 @@ while True:
                 player.change_hp(spell1.delta_ally_hp)
                 player.change_mp(spell1.delta_ally_mp)
                 r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
-                s_out.sendto(r.encode(), (IP, 22003))
+                s_out.connect((IP, 22003))
+                s_out.send(r.encode())
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
-                screenupdate()
-                if enemyturn == True:
-                    result = s_in.recv(1024)
-                    g = json.loads(result.decode())
-                    window2['TURN'].Update('Сейчас ход оппонента')
-                    player.change_hp(g.get('delta_enemy_hp'))
-                    player.change_mp(g.get('delta_enemy_mp'))
-                    enemyturn = False
-                    screenupdate()
+                data = b""
+                tmp = s_out.recv(1024)
+                while tmp:
+                    data += tmp
+                    tmp = s_out.recv(1024)
+                g = json.loads(data.decode())
+                window2['TURN'].Update('Сейчас ход оппонента')
+                player.change_hp(g.get('delta_enemy_hp'))
+                player.change_mp(g.get('delta_enemy_mp'))
             if event == 'Заклинание 2':
                 player.change_hp(spell2.delta_ally_hp)
                 player.change_mp(spell2.delta_ally_mp)
                 r = constructor.output(spell2.delta_enemy_hp, spell2.delta_enemy_mp, "json")
-                s_out.sendto(r.encode(), (IP, 22003))
+                s_out.connect((IP, 22003))
+                s_out.send(r.encode())
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
-                screenupdate()
-                if enemyturn == True:
-                    result = s_in.recv(1024)
-                    g = json.loads(result.decode())
-                    window2['TURN'].Update('Сейчас ход оппонента')
-                    player.change_hp(g.get('delta_enemy_hp'))
-                    player.change_mp(g.get('delta_enemy_mp'))
-                    enemyturn = False
-                    screenupdate()
+                _data, _addr = s_in.recvfrom(1024)
+                #window2['TURN'].Update('Сейчас ход оппонента')
+                #player.change_hp(g.get('delta_enemy_hp'))
+                #player.change_mp(g.get('delta_enemy_mp'))
             if event == 'Заклинание 3':
                 player.change_hp(spell3.delta_ally_hp)
                 player.change_mp(spell3.delta_ally_mp)
                 r = constructor.output(spell3.delta_enemy_hp, spell3.delta_enemy_mp, "json")
-                s_out.sendto(r.encode(), (IP, 22003))
+                s_out.connect((IP, 22003))
+                s_out.send(r.encode())
                 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
-                enemyturn = True
-                screenupdate()
-                if enemyturn == True:
-                    result = s_in.recv(1024)
-                    g = json.loads(result.decode())
-                    window2['TURN'].Update('Сейчас ход оппонента')
-                    player.change_hp(g.get('delta_enemy_hp'))
-                    player.change_mp(g.get('delta_enemy_mp'))
-                    enemyturn = False
-                    screenupdate()
+                #result = s_in.recv(4096)
+                #g = json.loads(result.decode())
+                #window2['TURN'].Update('Сейчас ход оппонента')
+                #player.change_hp(g.get('delta_enemy_hp'))
+                #player.change_mp(g.get('delta_enemy_mp'))
         window2.close()
 window.close()
