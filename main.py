@@ -119,14 +119,15 @@ while True:
             if event == sg.WIN_CLOSED:
                 wn2 = False
             if event == 'Заклинание 1':
-                player.change_hp(spell1.delta_ally_hp)
-                player.change_mp(spell1.delta_ally_mp)
-                r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
                 s_out.connect((IP, 22003))
-                s_out.send(r.encode())
-                spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
-                spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
-                spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+                if not enemyturn:
+                    player.change_hp(spell1.delta_ally_hp)
+                    player.change_mp(spell1.delta_ally_mp)
+                    r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
+                    s_out.send(r.encode())
+                    spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
+                    spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
+                    spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                 data = b""
                 tmp = s_out.recv(1024)
                 while tmp:
