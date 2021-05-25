@@ -112,7 +112,6 @@ while True:
         player = CharacterClass.Character()
         print(player.get_hp())
         s_out.connect((IP, 22003))
-        data = b""
         window2 = sg.Window('game', layout2)  # объявление окна с полем
         wn2 = True
         while wn2:
@@ -129,6 +128,7 @@ while True:
                     spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
+                data = b""
                 tmp = s_out.recv(1024)
                 while tmp:
                     data += tmp
