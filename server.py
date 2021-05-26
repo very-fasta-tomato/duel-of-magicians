@@ -1,13 +1,68 @@
 import socket
-import json
+import CharacterClass
+import SpellClass
+import createObject
+import constructor
 
 
+def launch_game(sock, clients):
+    player1 = CharacterClass.Character()
+    player2 = CharacterClass.Character()
+    #  начало игры
+    round_of_game = 0
+    while True:
+        round_of_game += 1
+        if round_of_game % 2 == 0:
+            _data, _addr = sock.recvfrom(1024)
+            if _addr == clients[0]:
+                player1_spell1 = createObject.createclassic()
+                player1_spell2 = createObject.createclassic()
+                player1_spell3 = createObject.createclassic()
+                if _data == 'Заклинание 1':
+                    player1.change_hp(player1_spell1.get_delta_ally_hp())
+                    player1.change_mp(player1_spell1.get_delta_ally_mp())
+                    player2.change_hp(player1_spell1.get_delta_ally_hp())
+                    player2.change_mp(player1_spell1.get_delta_ally_mp())
+                if _data == 'Заклинание 2':
+                    player1.change_hp(player1_spell2.get_delta_ally_hp())
+                    player1.change_mp(player1_spell2.get_delta_ally_mp())
+                    player2.change_hp(player1_spell2.get_delta_ally_hp())
+                    player2.change_mp(player1_spell2.get_delta_ally_mp())
+                if _data == 'Заклинание 3':
+                    player1.change_hp(player1_spell3.get_delta_ally_hp())
+                    player1.change_mp(player1_spell3.get_delta_ally_mp())
+                    player2.change_hp(player1_spell3.get_delta_ally_hp())
+                    player2.change_mp(player1_spell3.get_delta_ally_mp())
+        else:
+            _data, _addr = sock.recvfrom(1024)
+            if _addr == clients[1]:
+                player2_spell1 = createObject.createclassic()
+                player2_spell2 = createObject.createclassic()
+                player2_spell3 = createObject.createclassic()
+                if _data == 'Заклинание 1':
+                    player1.change_hp(player2_spell1.get_delta_ally_hp())
+                    player1.change_mp(player2_spell1.get_delta_ally_mp())
+                    player2.change_hp(player2_spell1.get_delta_ally_hp())
+                    player2.change_mp(player2_spell1.get_delta_ally_mp())
+                if _data == 'Заклинание 2':
+                    player1.change_hp(player2_spell2.get_delta_ally_hp())
+                    player1.change_mp(player2_spell2.get_delta_ally_mp())
+                    player2.change_hp(player2_spell2.get_delta_ally_hp())
+                    player2.change_mp(player2_spell2.get_delta_ally_mp())
+                if _data == 'Заклинание 3':
+                    player1.change_hp(player2_spell3.get_delta_ally_hp())
+                    player1.change_mp(player2_spell3.get_delta_ally_mp())
+                    player2.change_hp(player2_spell3.get_delta_ally_hp())
+                    player2.change_mp(player2_spell3.get_delta_ally_mp())
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# AF_INET - используется IP-протокол четвертой версии. SOCK_DGRAMM - UDP
-s.bind(('127.0.0.1', 22003))  # резерв адреса 127.0.0.1 и порта 8888
-result = s.recv(1024)  # прослушка порта и получение данных по одному килобайту
-print('Message:', result.decode())
-g=json.loads(result.decode())
-print(g.get('delta_enemy_hp'))
-s.close()  # остановка прослушиваение порта и его освобождение
+
+clients = []
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind(("", 14900))
+sock.listen(2)  # максимальное число соединений в очереди
+while True:
+    data, addr = sock.recvfrom(1024)
+    if addr not in clients:
+        clients.append(addr)
+    if len(clients) == 2:
+        launch_game(sock, clients)
