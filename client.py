@@ -40,8 +40,6 @@ spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
 spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
 spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
 
-playsound.playsound('moyaoborona.mp3', False)
-
 layout = [[sg.Button('Начать игру', size=(11, 1))],  # структура главного окна
           [sg.Button('Статистика', size=(11, 1))],
           [sg.Button('Настройки', size=(11, 1))],
@@ -67,10 +65,14 @@ layout2 = [[sg.Text('Сейчас ваш ход', key='TURN')],  # структ�
            [sg.Button('Создать заклинания')],
            [sg.Button('Обновить данные')]]
 
+layout3 = [[sg.Checkbox('Включить звук', enable_events=True, key='-sound-')],
+           [sg.Button('Назад')]]
+
 winstat = 0
 losestat = 0
 enemyturn = ''
 game_type = ''
+sound = ''
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получение IP пользователя
 # AF_INET - используется IP-протокол четвертой версии. SOCK_STREAM - TCP
@@ -99,9 +101,14 @@ while 1:
                                    [sg.Button('Назад')]]).read(close=True)
         print(event, values)
     if event == 'Настройки':
-        event, values = sg.Window('Настройки',
-                                  [[sg.Checkbox('Включить звук', enable_events=True, key='-sound-')],
-                                   [sg.Button('Назад')]]).read(close=True)
+        window3=sg.Window('Settings', layout3)
+        wn3=True
+        while wn3:
+            event, values = window3.read()
+            if event == sg.WIN_CLOSED or event == 'Назад':
+                wn3 = False
+            if values['-sound-'] is True:
+                sound = True
         print(event, values)
     if event == 'Начать игру':
         event, values = sg.Window('Режимы игры',
@@ -142,6 +149,8 @@ while 1:
                         spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
+                    if sound ==True:
+                        playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
                                               [[sg.Text('Сейчас ход оппонента')],
@@ -156,6 +165,8 @@ while 1:
                         spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell2.delta_enemy_hp, spell2.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
+                    if sound ==True:
+                        playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
                                               [[sg.Text('Сейчас ход оппонента')],
@@ -169,10 +180,11 @@ while 1:
                         spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell3.delta_enemy_hp, spell3.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
+                    if sound ==True:
+                        playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
                                               [[sg.Text('Сейчас ход оппонента')],
                                                [sg.Button('OK')]]).read(close=True)
-
-    mensahe = input()
-    sor.sendto(('[' + alias + ']' + mensahe).encode('utf-8'), server)
+        window2.close()
+window.close()
