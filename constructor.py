@@ -1,6 +1,6 @@
 import json
-import os
-import xml.etree.ElementTree as ET
+import dictxml
+
 
 def output(delta_enemy_hp, delta_enemy_mp, outputformat):
     if outputformat == "json":  # создание выходного файла на json
@@ -11,5 +11,6 @@ def output(delta_enemy_hp, delta_enemy_mp, outputformat):
     if outputformat == "xml":
         data = {'delta_enemy_hp': delta_enemy_hp,
                 'delta_enemy_mp': delta_enemy_mp}
-        xmloutput = xml.dumps(data)
+        xmloutput = dictxml.dictxml(data, 'delta')
         return xmloutput
+
