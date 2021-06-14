@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <duel-of-magicians>
     <players>
-        <character1>
+        <character>
             <delta_enemy_hp>20</delta_enemy_hp>
             <delta_enemy_mp>10</delta_enemy_mp>
-        </character1>
-        <character2>
-            <delta_our_hp>20</delta_our_hp>
-            <delta_our_mp>10</delta_our_mp>
-        </character2>
+        </character>
     </players>
 </duel-of-magicians>
