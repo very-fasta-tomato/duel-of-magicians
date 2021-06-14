@@ -8,14 +8,14 @@ def dictxml(d, root_node=None):
     if isinstance(d, dict):
         for key, value in dict.items(d):
             if isinstance(value, dict):
-                children.append(dict2xml(value, key))
+                children.append(dictxml(value, key))
             elif isinstance(value, list):
-                children.append(dict2xml(value, key))
+                children.append(dictxml(value, key))
             else:
                 xml = xml + ' ' + key + '="' + str(value) + '"'
     else:
         for value in d:
-            children.append(dict2xml(value, root_singular))
+            children.append(dictxml(value, root_singular))
 
     end_tag = '>' if 0 < len(children) else '/>'
 
