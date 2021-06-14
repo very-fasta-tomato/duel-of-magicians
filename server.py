@@ -22,5 +22,6 @@ while 1:
         client.append(addres)  # Если такова клиента нету , то добавить
     for clients in client:
         if clients == addres:
+            sock.sendto('1'.encode(), clients)
             continue  # Не отправлять данные клиенту который их прислал
         sock.sendto(data, clients)

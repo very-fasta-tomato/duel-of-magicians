@@ -32,8 +32,18 @@ def screenupdate():
 
 def read_sok():
     while 1:
+        global enemyturn
+        global player
         data = sor.recv(1024)
+        if data.decode('utf-8') == '1':
+            enemyturn = True
+        else:
+            g = json.loads(data.decode('utf-8'))
+            player.change_hp(g.get('delta_enemy_hp'))
+            player.change_mp(g.get('delta_enemy_mp'))
+            enemyturn = False
         print(data.decode('utf-8'))
+        enemyturn = False
 
 
 spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
@@ -101,8 +111,8 @@ while 1:
                                    [sg.Button('Назад')]]).read(close=True)
         print(event, values)
     if event == 'Настройки':
-        window3=sg.Window('Settings', layout3)
-        wn3=True
+        window3 = sg.Window('Settings', layout3)
+        wn3 = True
         while wn3:
             event, values = window3.read()
             if event == sg.WIN_CLOSED or event == 'Назад':
@@ -149,7 +159,8 @@ while 1:
                         spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell1.delta_enemy_hp, spell1.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
-                    if sound ==True:
+                    enemyturn = True
+                    if sound == True:
                         playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
@@ -165,7 +176,8 @@ while 1:
                         spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell2.delta_enemy_hp, spell2.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
-                    if sound ==True:
+                    enemyturn = True
+                    if sound == True:
                         playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
@@ -180,7 +192,8 @@ while 1:
                         spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
                     r = constructor.output(spell3.delta_enemy_hp, spell3.delta_enemy_mp, "json")
                     sor.sendto((r.encode()), server)
-                    if sound ==True:
+                    enemyturn = True
+                    if sound == True:
                         playsound.playsound('spellsound.mp3', False)
                 if enemyturn == True:
                     event, values = sg.Window('Внимание',
