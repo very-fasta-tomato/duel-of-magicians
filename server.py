@@ -17,6 +17,7 @@ print('Start Server')
 while 1:
     data, addres = sock.recvfrom(1024)
     print(addres[0], addres[1])
+    print(data)
     if addres not in client:
         client.append(addres)  # Если такова клиента нету , то добавить
     for clients in client:
