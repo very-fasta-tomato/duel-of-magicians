@@ -34,13 +34,20 @@ def read_sok():
     while 1:
         global enemyturn
         global player
+        global winstat
+        global win
         data = sor.recv(1024)
         if data.decode('utf-8') == '1':
             enemyturn = True
+        if data.decode('utf-8') == '404':
+            winstat = winstat + 1
+            win = True
         else:
             g = json.loads(data.decode('utf-8'))
             player.change_hp(g.get('delta_enemy_hp'))
             player.change_mp(g.get('delta_enemy_mp'))
+            if player.death_check() == True:
+                sor.sendto(('404'.encode()), server)
             enemyturn = False
         print(data.decode('utf-8'))
         enemyturn = False
@@ -78,11 +85,22 @@ layout2 = [[sg.Text('Сейчас ваш ход', key='TURN')],  # структ�
 layout3 = [[sg.Checkbox('Включить звук', enable_events=True, key='-sound-')],
            [sg.Button('Назад')]]
 
-winstat = 0
-losestat = 0
+f = open("win.txt", 'a')
+f.close()
+f = open("lose.txt", 'a')
+f.close()
+winstat_file = open("win.txt", "r")
+winstat = winstat_file.read()
+winstat_file.close()
+print(winstat)
+losestat_file = open("lose.txt", "r")
+losestat = losestat_file.read()
+losestat_file.close()
+print(losestat)
 enemyturn = ''
 game_type = ''
 sound = ''
+win = False
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # сокет для получение IP пользователя
 # AF_INET - используется IP-протокол четвертой версии. SOCK_STREAM - TCP
@@ -154,6 +172,18 @@ while 1:
                 if enemyturn == False:
                     player.change_mp(spell1.delta_ally_mp)
                     player.change_hp(spell1.delta_ally_hp)
+                    if player.death_check() == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы проиграли')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        losestat = losestat + 1
+                        sor.sendto(('404'.encode()), server)
+                        wn2 = False
+                    if win == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы победили')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        wn2 = False
                     shoot = random.random()
                     if shoot > spell1.verojatnost_popadanija:
                         spell1 = SpellClass.Spell(0, 0, 0, 0, 0)
@@ -171,6 +201,18 @@ while 1:
                 if enemyturn == False:
                     player.change_mp(spell2.delta_ally_mp)
                     player.change_hp(spell2.delta_ally_hp)
+                    if player.death_check() == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы проиграли')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        losestat = losestat + 1
+                        sor.sendto(('404'.encode()), server)
+                        wn2 = False
+                    if win == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы победили')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        wn2 = False
                     shoot = random.random()
                     if shoot > spell2.verojatnost_popadanija:
                         spell2 = SpellClass.Spell(0, 0, 0, 0, 0)
@@ -187,6 +229,18 @@ while 1:
                 if enemyturn == False:
                     player.change_mp(spell3.delta_ally_mp)
                     player.change_hp(spell3.delta_ally_hp)
+                    if player.death_check() == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы проиграли')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        losestat = losestat + 1
+                        sor.sendto(('404'.encode()), server)
+                        wn2 = False
+                    if win == True:
+                        event, values = sg.Window('Game Over',
+                                                  [[sg.Text('Вы победили')],
+                                                   [sg.Button('OK')]]).read(close=True)
+                        wn2 = False
                     shoot = random.random()
                     if shoot > spell3.verojatnost_popadanija:
                         spell3 = SpellClass.Spell(0, 0, 0, 0, 0)
@@ -201,3 +255,9 @@ while 1:
                                                [sg.Button('OK')]]).read(close=True)
         window2.close()
 window.close()
+winstat_file = open("win.txt", "w")
+winstat_file.write(winstat)
+winstat_file.close()
+losestat_file = open("lose.txt", "w")
+losestat_file.write(losestat)
+losestat_file.close()
