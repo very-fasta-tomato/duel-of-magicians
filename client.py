@@ -39,7 +39,7 @@ def read_sok():
         data = sor.recv(1024)
         if data.decode('utf-8') == '1':
             enemyturn = True
-        if data.decode('utf-8') == '404':
+        elif data.decode('utf-8') == '404':
             winstat = winstat + 1
             win = True
         else:
@@ -62,8 +62,7 @@ layout = [[sg.Button('Начать игру', size=(11, 1))],  # структу�
           [sg.Button('Настройки', size=(11, 1))],
           [sg.Button('Выход', size=(11, 1))]]
 
-layout2 = [[sg.Text('Сейчас ваш ход', key='TURN')],  # структура окна игры
-           [sg.Text('Ваши HP', key='-hp-')],
+layout2 = [[sg.Text('Ваши HP', key='-hp-')],  # структура окна игры
            [sg.Text('Ваши MP', key='-mp-')],
            [sg.Button('Заклинание 1', size=(21, 1)), sg.Button('Заклинание 2', size=(21, 1)),
             sg.Button('Заклинание 3', size=(21, 1))],
@@ -85,6 +84,7 @@ layout2 = [[sg.Text('Сейчас ваш ход', key='TURN')],  # структ�
 layout3 = [[sg.Checkbox('Включить звук', enable_events=True, key='-sound-')],
            [sg.Button('Назад')]]
 
+player = CharacterClass.Character()
 f = open("win.txt", 'a')
 f.close()
 f = open("lose.txt", 'a')
@@ -148,7 +148,6 @@ while 1:
         if event == 'Расширенный':
             game_type = 'Расширенный'
         print(event, values)
-        player = CharacterClass.Character()
         window2 = sg.Window('game', layout2)  # объявление окна с полем
         wn2 = True
         while wn2:
